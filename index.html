@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Gaming Hub</title>
+
+<style>
+body{
+background:#111;
+color:white;
+font-family:Arial;
+text-align:center;
+}
+
+.card{
+background:#222;
+margin:20px;
+padding:20px;
+border-radius:15px;
+}
+
+button{
+padding:12px 25px;
+font-size:18px;
+border:none;
+border-radius:10px;
+background:orange;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Gaming Hub 🎮</h1>
+
+<div class="card">
+<h2>Sensitivity</h2>
+<p>General: 95</p>
+<p>Red Dot: 90</p>
+</div>
+
+<div class="card">
+<h2>Daily Kills</h2>
+<p id="kills">0</p>
+
+<button onclick="addKill()">
+ADD KILL
+</button>
+</div>
+
+<script>
+let kills = 0;
+
+function addKill(){
+kills++;
+document.getElementById("kills").innerText = kills;
+}
+</script>
+
+</body>
+</html>
