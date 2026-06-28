@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Signup</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+/* --- OPTION 4: TOURNAMENT KING THEME (PREMIUM SIGNUP LAYOUT) --- */
+body {
+  margin: 0;
+  padding: 20px;
+  color: white;
+  font-family: 'Segoe UI', Roboto, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* Screen ke ekdum center me set karne ke liye */
+  background-color: #0b0101;
+  
+  /* Multiple layering for dynamic fire, lightning & floating gold feel */
+  background-image: 
+    linear-gradient(rgba(0, 0, 0, 0.7), rgba(15, 0, 0, 0.85)),
+    radial-gradient(circle at 50% 40%, rgba(255, 69, 0, 0.25) 0%, rgba(0, 0, 0, 0.9) 75%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Cdefs%3E%3ClinearGradient id='gold' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23ffd700'/%3E%3Cstop offset='100%25' stop-color='%23b8860b'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M160,90 L175,115 L200,70 L225,115 L240,90 L235,130 L165,130 Z' fill='%23ff0000' opacity='0.15'/%3E%3Cpath d='M30,20 L70,50 L50,80 L90,120 M350,40 L320,90 L360,130 L330,190' stroke='%23ff3333' stroke-width='1.5' fill='none' opacity='0.3'/%3E%3Ccircle cx='40' cy='180' r='10' fill='url(%23gold)' opacity='0.7'/%3E%3Ccircle cx='60' cy='420' r='12' fill='url(%23gold)' opacity='0.6'/%3E%3Ccircle cx='340' cy='250' r='9' fill='url(%23gold)' opacity='0.7'/%3E%3Ccircle cx='320' cy='500' r='14' fill='url(%23gold)' opacity='0.5'/%3E%3C/svg%3E");
+  
+  background-size: cover;
+  background-position: center top;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+center {
+  width: 100%;
+}
+
+/* Tournament King Signup Header */
+h2 {
+  font-size: 42px;
+  font-style: italic;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin-bottom: 30px;
+  color: #ffffff;
+  text-shadow: 
+    0 0 10px rgba(255, 0, 0, 0.8), 
+    0 0 20px #ff0000,
+    0 0 30px #ff4500;
+}
+
+/* Premium Form Container Card */
+.signup-card {
+  background: rgba(0, 0, 0, 0.65);
+  border: 1px solid rgba(255, 69, 0, 0.3);
+  border-radius: 12px;
+  padding: 30px 20px;
+  width: 85%;
+  max-width: 320px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+}
+
+/* Stylish Form Inputs */
+input[type="text"], input[type="email"], input[type="password"] {
+  width: 85%;
+  padding: 14px;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 69, 0, 0.5);
+  border-radius: 8px;
+  color: white;
+  font-size: 16px;
+  outline: none;
+  text-align: center;
+  transition: border 0.3s, box-shadow 0.3s;
+}
+
+input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus {
+  border-color: #ff0000;
+  box-shadow: 0 0 12px rgba(255, 0, 0, 0.6);
+}
+
+/* Solid Red King Button */
+button {
+  background: linear-gradient(45deg, #ff4500, #ff0000);
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  padding: 14px 24px;
+  width: 95%;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.7);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  margin-top: 10px;
+}
+
+button:hover {
+  transform: scale(1.04);
+  box-shadow: 0 0 22px #ff4500;
+}
+
+/* Redirection Link Styling */
+.login-link {
+  display: inline-block;
+  margin-top: 20px;
+  color: #ffcc00;
+  text-decoration: none;
+  font-size: 14px;
+  text-shadow: 0 0 5px rgba(255, 204, 0, 0.3);
+}
+.login-link:hover {
+  text-decoration: underline;
+  color: #ff8800;
+}
+</style>
+</head>
+<body>
+
+<center>
+
+  <div class="signup-card">
+  
+    <h2>Signup</h2>
+
+    <input type="text" id="name" placeholder="Enter Full Name">
+    <br><br>
+
+    <input type="email" id="email" placeholder="Enter Email">
+    <br><br>
+
+    <input type="password" id="password" placeholder="Create Password">
+    <br><br>
+
+    <button onclick="signup()">Create Account 🎮</button>
+    
+    <br>
+    <a href="login.html" class="login-link">Already have an account? Login</a>
+    
+  </div>
+
+</center>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDXB_JNlV4lK-St7dndGMLKaTP_yx67eKM",
+  authDomain: "ff-tournament-app-aa2e3.firebaseapp.com",
+  projectId: "ff-tournament-app-aa2e3",
+  storageBucket: "ff-tournament-app-aa2e3.firebasestorage.app",
+  messagingSenderId: "247807878735",
+  appId: "1:247807878735:web:f4fa407b563f3ed108ec3a"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+window.signup = async function() {
+
+  let name = document.getElementById("name").value;
+  let email = document.getElementById("email").value;
+  let password = document.getElementById("password").value;
+
+  if(name == "" || email == "" || password == "") {
+    alert("Kripya saari details bhariye bhai!");
+    return;
+  }
+
+  try {
+
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+
+    const user = userCredential.user;
+
+    await setDoc(doc(db, "users", user.uid), {
+      name: name,
+      email: email,
+      uid: user.uid,
+      coins: 0
+    });
+
+    alert("Signup Successful");
+    location.href = "login.html";
+
+  } catch(error) {
+    alert(error.message);
+  }
+
+}
+
+</script>
+
+</body>
+</html>
+
