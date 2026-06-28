@@ -66,6 +66,7 @@
 <button class="back-home-btn" onclick="window.location.href='4rabet.html'">⬅ Back To Casino</button>
 
 <h2>🎰 Roulette Wheel 🎰</h2>
+<div style="font-size: 20px; margin-bottom: 10px;">Balance: <span id="coins">0</span></div>
 
 <div class="roller-container">
     <div class="reel" id="reel1">🍒</div>
@@ -99,27 +100,54 @@
     <div class="win-row"><span>🍇 (200x)</span><span id="r9">2000</span></div>
 </div>
 
-<script>
-    const symbols = ['🍒','🍋','💎','7️⃣','⭐','🔔','🔥','🍀','🍉','🍇'];
-    const basePrizes = [1,2,5,10,15,20,25,50,100,200];
-    let currentBet = 10;
-    let lossStreak = 0; 
-    let usedJackpots = []; // Track karta hai kaunse jackpot lag chuke hain
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, updateDoc, onSnapshot, increment } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
-    function selectBet(val, btnElement){
+    const firebaseConfig = {
+      apiKey: "AIzaSyDXB_JNlV4lK-St7dndGMLKaTP_yx67eKM",
+      authDomain: "ff-tournament-app-aa2e3.firebaseapp.com",
+      projectId: "ff-tournament-app-aa2e3",
+      storageBucket: "ff-tournament-app-aa2e3.firebasestorage.app",
+      messagingSenderId: "247807878735",
+      appId: "1:247807878735:web:f4fa407b563f3ed108ec3a"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    let currentUser = null;
+    let currentBet = 10;
+
+    onAuthStateChanged(auth, async (user) => {
+        if (!user) { location.href = "login.html"; return; }
+        currentUser = user;
+        const userRef = doc(db, "users", user.uid);
+        onSnapshot(userRef, (snap) => {
+            if (snap.exists()) { document.getElementById("coins").innerText = snap.data().coins || 0; }
+        });
+    });
+
+    window.selectBet = function(val, btnElement){
         currentBet = val;
         document.querySelectorAll('.btn-bet').forEach(btn => btn.classList.remove('active'));
         btnElement.classList.add('active');
         document.getElementById('spinBtn').innerText = "SPIN " + val;
-        let betMult = (val === 20) ? 2 : (val === 50) ? 5 : (val === 100) ? 10 : 1;
-        for(let i=0; i<basePrizes.length; i++) {
-            document.getElementById('r'+i).innerText = basePrizes[i] * betMult;
-        }
     }
 
+    const symbols = ['🍒','🍋','💎','7️⃣','⭐','🔔','🔥','🍀','🍉','🍇'];
     function getRandomSymbol(){ return symbols[Math.floor(Math.random() * symbols.length)]; }
 
-    function spin(){
+    window.spin = async function(){
+        if (!currentUser) return;
+        const userRef = doc(db, "users", currentUser.uid);
+        const userSnap = await getDoc(userRef);
+        if((userSnap.data().coins || 0) < currentBet) { alert("Insufficient coins!"); return; }
+
+        await updateDoc(userRef, { coins: increment(-currentBet) });
+        
         const spinBtn = document.getElementById('spinBtn');
         spinBtn.disabled = true;
         document.getElementById('msg').innerText = "Spinning...";
@@ -134,44 +162,11 @@
             if(counter > 20) {
                 clearInterval(timer);
                 spinBtn.disabled = false;
-                
-                let r1 = document.getElementById('reel1').innerText;
-                let r2 = document.getElementById('reel2').innerText;
-                let r3 = document.getElementById('reel3').innerText;
-                
-                let jackpotSymbol = "";
-                let jackpotId = null;
-
-                // Milestones check: check karta hai ki kya jackpot abhi tak use hua hai ya nahi
-                if (lossStreak === 2 && !usedJackpots.includes(2)) { jackpotSymbol = '🍒'; jackpotId = 2; }
-                else if (lossStreak === 5 && !usedJackpots.includes(5)) { jackpotSymbol = '🍋'; jackpotId = 5; }
-                else if (lossStreak === 8 && !usedJackpots.includes(8)) { jackpotSymbol = '💎'; jackpotId = 8; }
-                else if (lossStreak === 19 && !usedJackpots.includes(19)) { jackpotSymbol = '7️⃣'; jackpotId = 19; }
-                else if (lossStreak === 24 && !usedJackpots.includes(24)) { jackpotSymbol = '⭐'; jackpotId = 24; }
-                else if (lossStreak === 39 && !usedJackpots.includes(39)) { jackpotSymbol = '🔔'; jackpotId = 39; }
-                else if (lossStreak === 49 && !usedJackpots.includes(49)) { jackpotSymbol = '🔥'; jackpotId = 49; }
-                else if (lossStreak === 99 && !usedJackpots.includes(99)) { jackpotSymbol = '🍀'; jackpotId = 99; }
-                else if (lossStreak === 199 && !usedJackpots.includes(199)) { jackpotSymbol = '🍉'; jackpotId = 199; }
-                else if (lossStreak === 399 && !usedJackpots.includes(399)) { jackpotSymbol = '🍇'; jackpotId = 399; }
-
-                if(jackpotSymbol !== "") {
-                    document.getElementById('reel1').innerText = jackpotSymbol;
-                    document.getElementById('reel2').innerText = jackpotSymbol;
-                    document.getElementById('reel3').innerText = jackpotSymbol;
-                    document.getElementById('msg').innerText = "MEGA JACKPOT! 🎉";
-                    usedJackpots.push(jackpotId); // Jackpot mark ho gaya
-                    lossStreak = 0; 
-                } else if (r1 === r2 || r2 === r3 || r1 === r3) {
-                    document.getElementById('msg').innerText = "You Won! 🎉";
-                    lossStreak = 0; 
-                } else {
-                    document.getElementById('msg').innerText = "Try Again!";
-                    lossStreak++; 
-                }
+                document.getElementById('msg').innerText = "Result pending...";
+                // Yahan aap apna win/loss logic laga kar updateDoc kar sakte hain
             }
         }, 100);
     }
 </script>
 </body>
 </html>
-
