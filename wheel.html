@@ -125,8 +125,12 @@
         if (!user) { location.href = "login.html"; return; }
         currentUser = user;
         const userRef = doc(db, "users", user.uid);
+        
         onSnapshot(userRef, (snap) => {
-            if (snap.exists()) { document.getElementById("coins").innerText = snap.data().coins || 0; }
+            console.log("Firestore Data:", snap.data());
+            if (snap.exists()) { 
+                document.getElementById("coins").innerText = snap.data().coins || 0; 
+            }
         });
     });
 
@@ -144,9 +148,23 @@
         if (!currentUser) return;
         const userRef = doc(db, "users", currentUser.uid);
         const userSnap = await getDoc(userRef);
-        if((userSnap.data().coins || 0) < currentBet) { alert("Insufficient coins!"); return; }
+        
+        console.log("Current Coins:", userSnap.data().coins);
 
-        await updateDoc(userRef, { coins: increment(-currentBet) });
+        if((userSnap.data().coins || 0) < currentBet) { 
+            alert("Insufficient coins!"); 
+            return; 
+        }
+
+        try{
+            await updateDoc(userRef,{
+                coins: increment(-currentBet)
+            });
+            console.log("Coins deducted:", currentBet);
+        } catch(err){
+            console.error(err);
+            alert(err.message);
+        }
         
         const spinBtn = document.getElementById('spinBtn');
         spinBtn.disabled = true;
@@ -162,8 +180,7 @@
             if(counter > 20) {
                 clearInterval(timer);
                 spinBtn.disabled = false;
-                document.getElementById('msg').innerText = "Result pending...";
-                // Yahan aap apna win/loss logic laga kar updateDoc kar sakte hain
+                document.getElementById('msg').innerText = "Spin complete!";
             }
         }, 100);
     }
