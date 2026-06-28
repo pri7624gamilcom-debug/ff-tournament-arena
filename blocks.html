@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lucky Pick - Premium</title>
+
+<style>
+    body{
+        background:#080000;
+        color:white;
+        font-family:Arial,sans-serif;
+        text-align:center;
+        padding:20px;
+    }
+
+    .game-card{
+        max-width:400px;
+        margin:auto;
+        background:#1a0000;
+        border:2px solid #ff3300;
+        border-radius:20px;
+        padding:20px;
+        box-shadow:0 0 20px rgba(255,50,0,.5);
+    }
+
+    h2{ color:#ffaa00; }
+
+    .stats{
+        display:flex;
+        justify-content:space-between;
+        margin-bottom:15px;
+        font-weight:bold;
+    }
+
+    .grid{
+        display:grid;
+        grid-template-columns:repeat(4,1fr);
+        gap:10px;
+    }
+
+    .card{
+        height:65px;
+        border-radius:10px;
+        background:#220000;
+        border:1px solid #ff3300;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        cursor:pointer;
+        font-weight:bold;
+        font-size:18px;
+        transition: 0.3s;
+    }
+
+    .win{ background:#006600; border-color:#00ff00; color:#fff; }
+    .empty{ background:#550000; }
+
+    button{
+        margin-top:15px;
+        padding:12px 20px;
+        border:none;
+        border-radius:20px;
+        background:#ff3300;
+        color:white;
+        font-weight:bold;
+        cursor:pointer;
+    }
+</style>
+</head>
+<body>
+
+<div class="game-card">
+    <h2>🍀 LUCKY PICK</h2>
+    <div class="stats">
+        <div>Chance: <span id="chance">3</span></div>
+        <div>Reward: <span id="reward">0</span></div>
+    </div>
+    <div class="grid" id="grid"></div>
+    <button onclick="startGame()">🔄 Play Again</button>
+</div>
+
+<script>
+    let chances = 3;
+    let reward = 0;
+    let lossStreak = 0; 
+    let autoWinCount = 0;
+
+    function startGame(){
+        chances = 3;
+        reward = 0;
+
+        document.getElementById("chance").innerText = chances;
+        document.getElementById("reward").innerText = reward;
+
+        const grid = document.getElementById("grid");
+        grid.innerHTML = "";
+
+        // Logic: Agar streak 5 ho gayi aur autoWin 4 baar se kam hai
+        let isAutoWin = (lossStreak >= 5 && autoWinCount < 4);
+        let cards;
+
+        if (isAutoWin) {
+            // Auto-win: Har block 20 dega
+            cards = new Array(16).fill(20);
+        } else {
+            cards = [5, 10, 15, 20, 25, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            cards.sort(() => Math.random() - 0.5);
+        }
+
+        cards.forEach(value => {
+            let card = document.createElement("div");
+            card.className = "card";
+            card.innerText = "?";
+
+            card.onclick = function(){
+                if(card.dataset.opened || chances <= 0) return;
+
+                card.dataset.opened = true;
+                chances--;
+                document.getElementById("chance").innerText = chances;
+
+                if(value > 0){
+                    card.classList.add("win");
+                    card.innerText = "+" + value;
+                    reward += value;
+                    document.getElementById("reward").innerText = reward;
+                } else {
+                    card.classList.add("empty");
+                    card.innerText = "❌";
+                }
+
+                if(chances === 0){
+                    setTimeout(()=>{
+                        // Streak Logic: Agar total reward 2 se kam hai toh haar maani jayegi
+                        if(reward <= 2) { 
+                            lossStreak++;
+                        } else {
+                            lossStreak = 0; 
+                            autoWinCount = 0;
+                        }
+                        
+                        if(isAutoWin) autoWinCount++;
+                        
+                        alert("Round Complete! Won: " + reward + " Coins");
+                    }, 300);
+                }
+            };
+            grid.appendChild(card);
+        });
+    }
+
+    startGame();
+</script>
+
+</body>
+</html>
