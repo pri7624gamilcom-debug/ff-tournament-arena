@@ -1,1 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mega Gaming Hub</title>
+    <style>
+        /* --- MAIN HUB STYLING --- */
+        html, body {
+            background-color: #0b0c10;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100vh;
+        }
 
+        body {
+            color: #ffffff;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 15px;
+            box-sizing: border-box;
+        }
+
+        .hub-card {
+            background: #1f2833;
+            padding: 35px 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 25px #66fcf1;
+            max-width: 360px;
+            width: 100%;
+            border: 1.5px solid #45a29e;
+            box-sizing: border-box;
+            transition: max-width 0.3s ease, box-shadow 0.3s ease;
+            margin: auto;
+        }
+
+        .hub-card.large-view {
+            max-width: 500px; 
+            background: #0d0200;
+            border-color: #ff3300;
+            box-shadow: 0 0 25px rgba(255, 51, 0, 0.6);
+        }
+
+        h1 {
+            color: #66fcf1;
+            font-size: 26px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 0;
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px #66fcf1;
+        }
+
+        .menu-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .gaming-btn {
+            background: linear-gradient(135deg, #ff4b2b, #ff416c);
+            color: white;
+            border: none;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 75, 43, 0.4);
+            transition: 0.2s ease;
+            text-transform: uppercase;
+        }
+
+        .gaming-btn:active {
+            transform: scale(0.96);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .back-btn {
+            background: #333;
+            color: #66fcf1;
+            border: 1px solid #66fcf1;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            float: left;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 12px;
+        }
+
+        /* --- FIREBASE TOURNAMENT CARD STYLING --- */
+        .tournament-card {
+            background: rgba(12, 3, 0, 0.9);
+            border: 1px solid rgba(255, 51, 0, 0.45);
+            border-radius: 12px;
+            padding: 20px; 
+            margin-top: 20px;
+            box-shadow: 0 0 20px rgba(255, 34, 0, 0.25);
+        }
+
+        .tournament-title {
+            font-size: 32px; 
+            font-style: italic;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(255, 68, 0, 0.8), 0 0 20px #ff3300;
+            margin-bottom: 20px;
+        }
+
+        .tournament-title .arena {
+            color: #ffaa00;
+            text-shadow: 0 0 10px #ffcc00, 0 0 20px #ff4400;
+        }
+
+        #username {
+            color: #ffaa00;
+            font-size: 24px; 
+            font-weight: bold;
+            text-shadow: 0 0 10px #ff6600, 0 0 20px #ff2200;
+            text-transform: uppercase;
+        }
+
+        #uid {
+            color: #ddcccc;
+            font-size: 14px;
+            margin-top: 8px;
+            word-wrap: break-word;
+        }
+
+        .coin-box {
+            margin-top: 15px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        #coins {
+            color: #ffcc00;
+            text-shadow: 0 0 10px #ffaa00, 0 0 20px #ff3300;
+        }
+
+        .grid-menu {
+            margin-top: 25px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px; 
+        }
+
+        .grid-menu button {
+            height: 85px; 
+            background: rgba(15, 3, 0, 0.65);
+            border: 2px solid #ff3300;
+            color: white;
+            font-size: 14px; 
+            font-weight: bold;
+            border-radius: 12px;
+            box-shadow: 0 0 12px rgba(255, 34, 0, 0.4);
+            cursor: pointer;
+            text-transform: uppercase;
+            padding: 8px;
+        }
+
+        .grid-menu button:hover {
+            background: rgba(40, 10, 0, 0.85);
+            border-color: #ffcc00;
+        }
+
+        .grid-menu button.back-hub-btn {
+            border-color: #00ffcc;
+            box-shadow: 0 0 12px rgba(0, 255, 200, 0.4);
+            color: #00ffcc;
+        }
+
+        .footer-tag {
+            margin-top: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            letter-spacing: 3px;
+            color: #ffffff;
+            text-shadow: 0 0 10px #ff2200;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="main-card-box" class="hub-card">
+        
+        <div id="main-hub">
+            <h1>MEGA GAMING<br>HUB</h1>
+            <div class="menu-buttons">
+                <button class="gaming-btn" onclick="location.href='4rabet.html'">1. Mega Gaming Hub</button>
+                <button class="gaming-btn" onclick="openSection('tournament-section', true)">2. FF Tournament</button>
+                <button class="gaming-btn" onclick="openSection('online-games-section', false)">3. Online Games</button>
+            </div>
+        </div>
+
+        <div id="tournament-section" class="hidden" style="text-align: center;">
+            <div class="tournament-title">
+                TOURNAMENT <span class="arena">ARENA</span>
+            </div>
+
+            <div class="tournament-card">
+                <div id="username">Loading...</div>
+                <div id="uid">UID: Loading...</div>
+                <div class="coin-box">
+                    🪙 Coins : <span id="coins">0</span>
+                </div>
+            </div>
+
+            <div class="grid-menu">
+                <button onclick="location.href='room.html?from=sub'">⚔️ Tournament Rooms</button>
+                <button onclick="location.href='wallet.html?from=sub'">💰 Wallet</button>
+                <button onclick="location.href='history.html?from=sub'">📜 Withdraw History</button>
+                <button>👥 Referral</button>
+                <button onclick="location.href='admin-login.html?from=sub'">👑 Admin Panel</button>
+                
+                <button class="back-hub-btn" onclick="backToHub()">🏠 Main Home</button>
+                
+                <button onclick="logout()">🚪 Logout</button>
+            </div>
+
+            <div class="footer-tag">FIGHT • WIN • REPEAT</div>
+        </div>
+
+        <div id="online-games-section" class="hidden">
+            <button class="back-btn" onclick="backToHub()">◀ BACK</button>
+            <br><br>
+            <h2 style="color: #ffeb3b;">🌐 Online Casual Games</h2>
+            <p>Your HTML/JS casual online games will run here.</p>
+        </div>
+
+    </div>
+
+    <script>
+        function openSection(sectionId, isLargeView) {
+            document.getElementById('main-hub').classList.add('hidden');
+            document.getElementById('tournament-section').classList.add('hidden');
+            document.getElementById('online-games-section').classList.add('hidden');
+            
+            document.getElementById(sectionId).classList.remove('hidden');
+            
+            const containerBox = document.getElementById('main-card-box');
+            if (isLargeView) {
+                containerBox.classList.add('large-view');
+            } else {
+                containerBox.classList.remove('large-view');
+            }
+            localStorage.setItem('activeGameSection', sectionId);
+        }
+
+        function backToHub() {
+            document.getElementById('tournament-section').classList.add('hidden');
+            document.getElementById('online-games-section').classList.add('hidden');
+            document.getElementById('main-hub').classList.remove('hidden');
+            
+            const containerBox = document.getElementById('main-card-box');
+            containerBox.classList.remove('large-view');
+            
+            localStorage.removeItem('activeGameSection');
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedSection = localStorage.getItem('activeGameSection');
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            if (savedSection === 'tournament-section' || urlParams.get('from') === 'sub') {
+                openSection('tournament-section', true);
+            }
+        });
+    </script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
+        import { getAuth } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDXB_JNlV4lK-St7dndGMLKaTP_yx67eKM",
+            authDomain: "ff-tournament-app-aa2e3.firebaseapp.com",
+            projectId: "ff-tournament-app-aa2e3",
+            storageBucket: "ff-tournament-app-aa2e3.firebasestorage.app",
+            messagingSenderId: "247807878735",
+            appId: "1:247807878735:web:f4fa407b563f3ed108ec3a"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                let uid = user.uid;
+                document.getElementById("uid").innerHTML = "UID: " + uid;
+
+                try {
+                    const docRef = doc(db, "users", uid);
+                    const docSnap = await getDoc(docRef);
+
+                    if (docSnap.exists()) {
+                        let data = docSnap.data();
+                        document.getElementById("coins").innerHTML = data.coins !== undefined ? data.coins : 0;
+                        document.getElementById("username").innerHTML = data.name || "Player";
+                        
+                        localStorage.setItem("coins", data.coins || 0);
+                        localStorage.setItem("name", data.name || "Player");
+                        localStorage.setItem("uid", uid);
+                    } else {
+                        document.getElementById("username").innerHTML = "Player";
+                        document.getElementById("coins").innerHTML = 0;
+                    }
+                } catch (error) {
+                    console.error("Error fetching database document:", error);
+                }
+            } else {
+                location.href = "login.html";
+            }
+        });
+
+        window.logout = function(){
+            auth.signOut().then(() => {
+                localStorage.clear();
+                sessionStorage.clear();
+                location.href = "login.html";
+            }).catch((error) => {
+                console.error("Logout Error:", error);
+            });
+        }
+    </script>
+</body>
+</html>
+
+<script type="module" src="firebase-config.js"></script>
