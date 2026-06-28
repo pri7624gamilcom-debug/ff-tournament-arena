@@ -1,1 +1,404 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Tournament Rooms</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<style>
+/* --- OPTION 4: TOURNAMENT KING THEME (PREMIUM ROOMS LAYOUT) --- */
+body {
+  margin: 0;
+  padding: 20px;
+  color: white;
+  font-family: 'Segoe UI', Roboto, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #0b0101;
+  
+  /* Multiple layering for dynamic fire, lightning & floating gold feel */
+  background-image: 
+    linear-gradient(rgba(0, 0, 0, 0.75), rgba(15, 0, 0, 0.85)),
+    radial-gradient(circle at 50% 30%, rgba(255, 69, 0, 0.25) 0%, rgba(0, 0, 0, 0.9) 70%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Cdefs%3E%3ClinearGradient id='gold' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23ffd700'/%3E%3Cstop offset='100%25' stop-color='%23b8860b'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M160,90 L175,115 L200,70 L225,115 L240,90 L235,130 L165,130 Z' fill='%23ff0000' opacity='0.15'/%3E%3Cpath d='M30,20 L70,50 L50,80 L90,120 M350,40 L320,90 L360,130 L330,190' stroke='%23ff3333' stroke-width='1.5' fill='none' opacity='0.3'/%3E%3Ccircle cx='40' cy='180' r='10' fill='url(%23gold)' opacity='0.7'/%3E%3Ccircle cx='60' cy='420' r='12' fill='url(%23gold)' opacity='0.6'/%3E%3Ccircle cx='340' cy='250' r='9' fill='url(%23gold)' opacity='0.7'/%3E%3Ccircle cx='320' cy='500' r='14' fill='url(%23gold)' opacity='0.5'/%3E%3C/svg%3E");
+  
+  background-size: cover;
+  background-position: center top;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+center {
+  width: 100%;
+}
+
+/* Tournament King Header Look */
+h1 {
+  font-size: 36px;
+  font-style: italic;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-top: 15px;
+  color: #ffffff;
+  text-shadow: 
+    0 0 10px rgba(255, 0, 0, 0.8), 
+    0 0 20px #ff0000,
+    0 0 30px #ff4500;
+}
+
+h2 {
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #ffcc00;
+  text-shadow: 0 0 10px rgba(255, 204, 0, 0.4);
+  margin-bottom: 8px;
+}
+
+/* Room Cards Structure */
+.room-card {
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 0, 0, 0.3);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 20px auto;
+  width: 85%;
+  max-width: 340px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+  text-align: center;
+}
+
+.room-card hr {
+  border: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(255,0,0,0.5), transparent);
+  margin-bottom: 15px;
+}
+
+.room-card p {
+  margin: 8px 0;
+  font-size: 15px;
+}
+
+/* Target Timer Styling */
+.match-timer {
+  font-size: 18px;
+  font-weight: bold;
+  color: #ff3333;
+  text-shadow: 0 0 10px rgba(255, 0, 0, 0.6);
+  margin: 12px 0 !important;
+}
+
+/* Premium Registration Box Pop-up */
+#joinBox {
+  background: rgba(15, 2, 2, 0.95);
+  border: 2px solid #ff4500;
+  box-shadow: 0 0 25px rgba(255, 69, 0, 0.5);
+  border-radius: 12px;
+  width: 85%;
+  max-width: 320px;
+  margin: 20px auto;
+  padding: 20px !important;
+}
+
+/* Stylish Form Inputs */
+input[type="text"] {
+  width: 85%;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 69, 0, 0.5);
+  border-radius: 6px;
+  color: white;
+  font-size: 15px;
+  outline: none;
+  text-align: center;
+  transition: border 0.3s;
+}
+
+input[type="text"]:focus {
+  border-color: #ff0000;
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+}
+
+/* Single Column Solid Red Buttons */
+button {
+  background: linear-gradient(45deg, #ff4500, #ff0000);
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+  border: none;
+  padding: 12px 20px;
+  width: 85%;
+  max-width: 320px;
+  border-radius: 8px;
+  box-shadow: 0 0 12px rgba(255, 0, 0, 0.6);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+button:hover {
+  transform: scale(1.04);
+  box-shadow: 0 0 20px #ff4500;
+}
+
+/* Action Secondary Button inside Card */
+.btn-secondary {
+  background: linear-gradient(45deg, #333, #111);
+  border: 1px solid rgba(255,255,255,0.2);
+  box-shadow: none;
+}
+.btn-secondary:hover {
+  background: linear-gradient(45deg, #444, #222);
+  box-shadow: 0 0 10px rgba(255,255,255,0.2);
+}
+</style>
+</head>
+<body>
+
+<center>
+
+  <h1>TOURNAMENT ROOMS</h1>
+
+  <div id="rooms">Loading...</div>
+
+  <div id="joinBox" style="display:none;">
+    <h2>Join Tournament</h2>
+    <br>
+    <input type="text" id="gameuid" placeholder="Enter Game UID">
+    <br><br>
+    <input type="text" id="utr" placeholder="Enter UTR Number">
+    <br><br>
+    <button onclick="submitRegistration()">Submit Registration</button>
+  </div>
+
+  <br><br>
+
+  <a href="home.html" style="text-decoration: none;">
+    <button class="btn-secondary" style="max-width: 180px;">← Back</button>
+  </a>
+
+</center>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+getDocs,
+addDoc,
+query,
+where,
+doc,
+getDoc,
+updateDoc,
+setDoc
+} from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDXB_JNlV4lK-St7dndGMLKaTP_yx67eKM",
+  authDomain: "ff-tournament-app-aa2e3.firebaseapp.com",
+  projectId: "ff-tournament-app-aa2e3",
+  storageBucket: "ff-tournament-app-aa2e3.firebasestorage.app",
+  messagingSenderId: "247807878735",
+  appId: "1:247807878735:web:f4fa407b563f3ed108ec3a"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+let selectedRoomId = "";
+let selectedRoomName = "";
+let selectedRoomFee = 0;
+
+async function loadRooms(){
+  const roomBox = document.getElementById("rooms");
+  try{
+    const querySnapshot = await getDocs(collection(db,"rooms"));
+    roomBox.innerHTML = "";
+
+    if(querySnapshot.empty){
+      roomBox.innerHTML = "<h3 style='margin-top:30px;'>No Rooms Available</h3>";
+      return;
+    }
+
+    querySnapshot.forEach((roomDoc)=>{
+      const room = roomDoc.data();
+      
+      // Wrapped rooms inside structured elite king-themed cards
+      roomBox.innerHTML += `
+        <div class="room-card">
+          <h2>${room.roomName}</h2>
+          <hr>
+          <p><b>Entry Fee:</b> ₹${room.entryFee}</p>
+          <p><b>Kill Reward:</b> ₹3 / Kill</p>
+          <p style="color: #aaa; font-size:12px;">Raw Time: ${room.startTime}</p>
+          <p id="timer-${roomDoc.id}" class="match-timer">Loading Timer...</p>
+          <button onclick="showJoinForm('${roomDoc.id}','${room.roomName}','${room.entryFee}')">Register Now</button>
+          <button class="btn-secondary" onclick="checkRoomAccess('${roomDoc.id}')">Get Room Details</button>
+        </div>
+      `;
+
+      setTimeout(() => {
+        startCountdown(
+          roomDoc.id,
+          room.startTime
+        );
+      }, 200);
+    });
+  }
+  catch(error){
+    document.getElementById("rooms").innerHTML = "<h3>Error:</h3><p>" + error.message + "</p>";
+    console.log(error);
+  }
+}
+
+window.startCountdown = function(id, startTimeStr) {
+  const timerElement = document.getElementById("timer-" + id);
+  if (!timerElement) return;
+
+  if (!startTimeStr) {
+    timerElement.innerHTML = "Time Not Set";
+    return;
+  }
+
+  const targetTime = new Date(startTimeStr).getTime();
+  if (isNaN(targetTime)) {
+    timerElement.innerHTML = "Invalid Time Format";
+    return;
+  }
+
+  setInterval(() => {
+    const now = Date.now();
+    const diff = targetTime - now;
+
+    if (diff <= 0) {
+      timerElement.innerHTML = "🟢 Match Started";
+      return;
+    }
+
+    const h = Math.floor(diff / 1000 / 60 / 60);
+    const m = Math.floor((diff / 1000 / 60) % 60);
+    const s = Math.floor((diff / 1000) % 60);
+
+    timerElement.innerHTML = h + "h " + m + "m " + s + "s";
+  }, 1000);
+}
+
+window.showJoinForm = function(roomId,roomName,entryFee){
+  selectedRoomId = roomId;
+  selectedRoomName = roomName;
+  selectedRoomFee = Number(entryFee);
+  document.getElementById("joinBox").style.display = "block";
+  document.getElementById("joinBox").scrollIntoView({ behavior: 'smooth' });
+}
+
+window.submitRegistration = async function(){
+  let gameuid = document.getElementById("gameuid").value;
+  let utr = document.getElementById("utr").value;
+
+  if(gameuid==""){ alert("Game UID Enter Karo"); return; }
+  if(utr==""){ alert("UTR Number Enter Karo"); return; }
+
+  try{
+    const userRef = doc(db,"users",localStorage.getItem("uid"));
+    const userSnap = await getDoc(userRef);
+    let currentCoins = Number(userSnap.data().coins || 0);
+
+    if(currentCoins < selectedRoomFee){
+      alert("Not Enough Coins\n\nRequired: " + selectedRoomFee + "\nAvailable: " + currentCoins);
+      return;
+    }
+
+    await updateDoc(userRef, {
+      coins: currentCoins - selectedRoomFee
+    });
+
+    const poolRef = doc(db,"system","prizePool");
+    const poolSnap = await getDoc(poolRef);
+
+    if(poolSnap.exists()){
+      let total = Number(poolSnap.data().coins || 0);
+      await updateDoc(poolRef, {
+        coins: total + selectedRoomFee
+      });
+    } else {
+      await setDoc(poolRef, {
+        coins: selectedRoomFee
+      });
+    }
+
+    await addDoc(collection(db,"registrations"), {
+      playerName: localStorage.getItem("name"),
+      userId: localStorage.getItem("uid"),
+      roomId: selectedRoomId,
+      roomName: selectedRoomName,
+      entryFee: selectedRoomFee, 
+      gameUid: gameuid,
+      utr: utr,
+      status: "pending",
+      time: new Date().toISOString()
+    });
+
+    alert("Registration Submitted Successfully");
+    document.getElementById("gameuid").value="";
+    document.getElementById("utr").value="";
+    document.getElementById("joinBox").style.display = "none";
+  }
+  catch(error){
+    alert(error.message);
+  }
+}
+
+window.checkRoomAccess = async function(roomDocId){
+  try{
+    const userId = localStorage.getItem("uid");
+    const q = query( 
+      collection(db,"registrations"), 
+      where("userId","==",userId), 
+      where("roomId","==",roomDocId), 
+      where("status","==","approved") 
+    );
+    
+    const snap = await getDocs(q);
+    if(snap.empty){
+      alert("Approval Pending"); 
+      return;
+    }
+    
+    const roomRef = doc(db,"rooms",roomDocId); 
+    const roomSnap = await getDoc(roomRef);
+    if(!roomSnap.exists()){ 
+      alert("Room Not Found"); 
+      return; 
+    }
+    
+    const room = roomSnap.data();
+    const now = new Date(); 
+    const startTime = new Date(room.startTime);
+    
+    if(now < startTime){
+      alert( 
+        "Match Starts At:\n" + startTime.toLocaleString() + 
+        "\n\nRoom details will be visible after start time." 
+      );
+      return;
+    }
+    
+    alert( "Room ID: " + room.roomId + "\nPassword: " + room.password );
+    
+  } catch(error){
+    alert(error.message);
+  }
+}
+
+loadRooms();
+
+</script>
+
+</body>
+</html>
