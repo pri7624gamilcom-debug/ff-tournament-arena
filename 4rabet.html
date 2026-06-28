@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4RABET CASINO ARENA</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',sans-serif;
+}
+
+body{
+background:
+linear-gradient(rgba(0,0,0,.85),rgba(0,0,0,.9)),
+radial-gradient(circle at center,#ff330022 0%,#000 70%);
+background-color:#0a0000;
+color:white;
+min-height:100vh;
+padding:20px;
+text-align:center;
+}
+
+.header{
+margin-bottom:25px;
+}
+
+.logo{
+font-size:38px;
+font-weight:900;
+color:#fff;
+text-transform:uppercase;
+text-shadow:
+0 0 10px #ff3300,
+0 0 20px #ff3300,
+0 0 40px #ff6600;
+}
+
+.subtitle{
+color:#ffaa00;
+font-weight:bold;
+letter-spacing:4px;
+margin-top:5px;
+}
+
+.player-card{
+background:rgba(20,0,0,.9);
+border:2px solid #ff3300;
+border-radius:20px;
+padding:20px;
+max-width:500px;
+margin:auto;
+box-shadow:
+0 0 20px rgba(255,50,0,.5);
+}
+
+.avatar{
+font-size:65px;
+margin-bottom:10px;
+}
+
+#username{
+font-size:28px;
+font-weight:bold;
+color:#ffaa00;
+text-shadow:0 0 10px #ff8800;
+}
+
+#uid{
+margin-top:8px;
+font-size:13px;
+word-break:break-all;
+color:#ddd;
+}
+
+.coin-box{
+margin-top:15px;
+font-size:24px;
+font-weight:bold;
+}
+
+#coins{
+color:#ffcc00;
+text-shadow:
+0 0 10px #ffaa00,
+0 0 20px #ff3300;
+}
+
+.choose{
+margin:30px 0 20px;
+font-size:26px;
+font-weight:bold;
+color:#ffaa00;
+text-shadow:0 0 10px #ff5500;
+}
+
+.game-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:15px;
+max-width:600px;
+margin:auto;
+}
+
+.game-card{
+background:
+linear-gradient(135deg,#220000,#550000);
+border:2px solid #ff3300;
+border-radius:18px;
+padding:25px 10px;
+cursor:pointer;
+color:white;
+font-size:18px;
+font-weight:bold;
+box-shadow:
+0 0 15px rgba(255,50,0,.4);
+transition:.2s;
+}
+
+.game-card:active{
+transform:scale(.96);
+}
+
+.game-icon{
+font-size:45px;
+display:block;
+margin-bottom:10px;
+}
+
+.coming{
+opacity:.7;
+}
+
+.home-btn{
+margin-top:25px;
+width:100%;
+max-width:500px;
+padding:16px;
+border:none;
+border-radius:30px;
+background:linear-gradient(45deg,#ff6600,#ff2200);
+color:white;
+font-size:18px;
+font-weight:bold;
+cursor:pointer;
+box-shadow:0 0 15px rgba(255,50,0,.6);
+}
+
+.footer{
+margin-top:30px;
+color:#ffaa00;
+font-weight:bold;
+letter-spacing:3px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+<div class="logo">🔥 4RABET CASINO ARENA 🔥</div>
+<div class="subtitle">PLAY • WIN • REPEAT</div>
+</div>
+
+<div class="player-card">
+
+<div class="avatar">⚔️</div>
+
+<div id="username">PLAYER</div>
+
+<div id="uid">UID : Loading...</div>
+
+<div class="coin-box">
+🪙 Coins :
+<span id="coins">0</span>
+</div>
+
+</div>
+
+<div class="choose">
+CHOOSE YOUR GAME
+</div>
+
+<div class="game-grid">
+
+<div class="game-card"
+onclick="location.href='helicopter.html'">
+<span class="game-icon">🚁</span>
+HELICOPTER CRASH
+</div>
+
+<div class="game-card"
+onclick="location.href='wheel.html'">
+<span class="game-icon">🎰</span>
+ROULETTE WHEEL
+</div>
+
+<div class="game-card"
+onclick="location.href='blocks.html'">
+<span class="game-icon">🎨</span>
+COLOR BLOCKS
+</div>
+
+<div class="game-card coming">
+<span class="game-icon">🔒</span>
+COMING SOON
+</div>
+
+</div>
+
+<button class="home-btn"
+onclick="location.href='home.html?from=sub'">
+🏠 BACK TO HOME
+</button>
+
+<div class="footer">
+FIGHT • WIN • REPEAT
+</div>
+
+<script>
+document.getElementById("coins").innerText =
+localStorage.getItem("coins") || "0";
+
+document.getElementById("username").innerText =
+localStorage.getItem("name") || "PLAYER";
+
+document.getElementById("uid").innerText =
+"UID : " + (localStorage.getItem("uid") || "Not Found");
+</script>
+
+</body>
+</html>
