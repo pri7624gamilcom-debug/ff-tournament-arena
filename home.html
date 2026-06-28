@@ -86,9 +86,20 @@
             document.getElementById('main-card-box').classList.remove('large-view');
         }
 
-        // UPDATED: Real-time Listener (onSnapshot)
+        // --- AUTH & REAL-TIME DATABASE SYNC ---
         firebase.auth().onAuthStateChanged(async (user) => {
+            console.log("AUTH USER:", user);
+
             if (user) {
+                console.log("LOGIN UID:", user.uid);
+
+                // Initial Debug Check
+                firebase.firestore().collection("users").doc(user.uid).get().then((doc) => {
+                    console.log("DOC EXISTS:", doc.exists);
+                    console.log("DOC DATA:", doc.data());
+                });
+
+                // Real-time Update Listener
                 firebase.firestore().collection("users").doc(user.uid).onSnapshot((doc) => {
                     if (doc.exists) {
                         let d = doc.data();
@@ -97,7 +108,9 @@
                         document.getElementById("uid").innerText = document.getElementById("uid-sub").innerText = "UID: " + user.uid;
                     }
                 });
-            } else { location.href = "login.html"; }
+            } else {
+                location.href = "login.html";
+            }
         });
     </script>
 </body>
