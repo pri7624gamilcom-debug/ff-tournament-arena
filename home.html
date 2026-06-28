@@ -1,1 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mega Gaming Hub</title>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
+    <style>
+        html, body { margin: 0; padding: 0; width: 100%; min-height: 100vh; }
+        body { font-family: 'Segoe UI', Roboto, sans-serif; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px 15px; box-sizing: border-box; background: linear-gradient(rgba(0,0,0,.85),rgba(0,0,0,.95)), radial-gradient(circle at center,#ff330022 0%,#000 70%); background-color: #080000; }
+        .hub-card { background: #1f2833; padding: 35px 20px; border-radius: 15px; box-shadow: 0 0 25px #66fcf1; max-width: 360px; width: 100%; border: 1.5px solid #45a29e; box-sizing: border-box; transition: max-width 0.3s ease; margin: auto; }
+        .hub-card.large-view { max-width: 500px; background: #0d0200; border-color: #ff3300; box-shadow: 0 0 25px rgba(255, 51, 0, 0.6); }
+        .arena-header { font-size: 34px; font-weight: 900; text-align: center; margin-bottom: 25px; color: #fff; text-shadow: 0 0 10px #ff3300, 0 0 20px #ff3300, 0 0 40px #ff6600; }
+        .player-card { background: rgba(20,0,0,.9); border: 2px solid #ff3300; border-radius: 20px; padding: 20px; margin-bottom: 25px; text-align: center; box-shadow: 0 0 20px rgba(255,50,0,.5); }
+        .player-icon { font-size: 60px; margin-bottom: 10px; }
+        #username, #username-sub { font-size: 28px; font-weight: bold; color: #ffaa00; text-shadow: 0 0 10px #ff8800; }
+        #uid, #uid-sub { margin-top: 8px; font-size: 13px; color: #ddd; }
+        .coin-box { margin-top: 15px; font-size: 24px; font-weight: bold; color: #ffffff; }
+        #coins, #coins-sub { color: #ffcc00; text-shadow: 0 0 10px #ffaa00, 0 0 20px #ff3300; }
+        .game-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        .game-card { background: linear-gradient(135deg,#220000,#550000); border: 2px solid #ff3300; border-radius: 18px; padding: 20px 10px; color: white; font-size: 16px; font-weight: bold; cursor: pointer; }
+        .home-btn { margin-top: 20px; width: 100%; padding: 16px; border: none; border-radius: 30px; background: linear-gradient(45deg,#ff6600,#ff2200); color: white; font-size: 18px; font-weight: bold; cursor: pointer; }
+        .hidden { display: none !important; }
+        .gaming-btn { background: linear-gradient(45deg,#ff6600,#ff2200); border: none; padding: 16px; border-radius: 30px; font-size: 17px; font-weight: bold; color: white; width: 100%; margin-top: 15px; cursor: pointer; text-transform: uppercase; }
+    </style>
+</head>
+<body>
+
+    <div id="main-card-box" class="hub-card">
+        <div id="main-hub">
+            <div class="arena-header">🔥 TOURNAMENT ARENA 🔥</div>
+            <div class="player-card">
+                <div class="player-icon">⚔️</div>
+                <div id="username">PLAYER</div>
+                <div id="uid">UID : Loading...</div>
+                <div class="coin-box">🪙 Coins : <span id="coins">0</span></div>
+            </div>
+            <button class="gaming-btn" onclick="location.href='4rabet.html'">🎰 4RABET CASINO</button>
+            <button class="gaming-btn" onclick="openSection('tournament-section', true)">🏆 FF TOURNAMENT</button>
+            <button class="gaming-btn" onclick="alert('🚧 Online Games Coming Soon!')">🎮 ONLINE GAMES</button>
+        </div>
+
+        <div id="tournament-section" class="hidden">
+            <div class="arena-header">🔥 TOURNAMENT ARENA 🔥</div>
+            <div class="player-card">
+                <div class="player-icon">🏆</div>
+                <div id="username-sub">PLAYER</div>
+                <div id="uid-sub">UID : Loading...</div>
+                <div class="coin-box">🪙 Coins : <span id="coins-sub">0</span></div>
+            </div>
+            <div class="game-grid">
+                <button class="game-card" onclick="location.href='room.html?from=sub'">⚔️<br>Rooms</button>
+                <button class="game-card" onclick="location.href='wallet.html?from=sub'">💰<br>Wallet</button>
+                <button class="game-card" onclick="location.href='history.html?from=sub'">📜<br>History</button>
+                <button class="game-card">👥<br>Referral</button>
+                <button class="game-card" onclick="location.href='admin-login.html?from=sub'">👑<br>Admin</button>
+                <button class="game-card" onclick="firebase.auth().signOut().then(() => location.href='login.html')">🚪<br>Logout</button>
+            </div>
+            <button class="home-btn" onclick="backToHub()">🏠 BACK TO HOME</button>
+        </div>
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDXB_JNlV4lK-St7dndGMLKaTP_yx67eKM",
+            authDomain: "ff-tournament-app-aa2e3.firebaseapp.com",
+            projectId: "ff-tournament-app-aa2e3",
+            storageBucket: "ff-tournament-app-aa2e3.firebasestorage.app",
+            messagingSenderId: "247807878735",
+            appId: "1:247807878735:web:f4fa407b563f3ed108ec3a"
+        };
+        firebase.initializeApp(firebaseConfig);
+
+        function openSection(id, large) {
+            document.getElementById('main-hub').classList.add('hidden');
+            document.getElementById('tournament-section').classList.remove('hidden');
+            if(large) document.getElementById('main-card-box').classList.add('large-view');
+        }
+
+        function backToHub() {
+            document.getElementById('tournament-section').classList.add('hidden');
+            document.getElementById('main-hub').classList.remove('hidden');
+            document.getElementById('main-card-box').classList.remove('large-view');
+        }
+
+        // UPDATED: Real-time Listener (onSnapshot)
+        firebase.auth().onAuthStateChanged(async (user) => {
+            if (user) {
+                firebase.firestore().collection("users").doc(user.uid).onSnapshot((doc) => {
+                    if (doc.exists) {
+                        let d = doc.data();
+                        document.getElementById("username").innerText = document.getElementById("username-sub").innerText = d.name || "Player";
+                        document.getElementById("coins").innerText = document.getElementById("coins-sub").innerText = d.coins || 0;
+                        document.getElementById("uid").innerText = document.getElementById("uid-sub").innerText = "UID: " + user.uid;
+                    }
+                });
+            } else { location.href = "login.html"; }
+        });
+    </script>
+</body>
+</html>
