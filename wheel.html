@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roulette Wheel</title>
+    <style>
+        body {
+            background: linear-gradient(rgba(0,0,0,.85),rgba(0,0,0,.95)),
+                        radial-gradient(circle at center,#ff330022 0%,#000 70%);
+            background-color: #080000;
+            color: white;
+            text-align: center;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            padding: 10px;
+            margin: 0;
+        }
+
+        .back-home-btn {
+            background: rgba(255, 51, 0, 0.2);
+            color: #ff3300;
+            padding: 10px 20px;
+            border-radius: 20px;
+            border: 1px solid #ff3300;
+            cursor: pointer;
+            margin-bottom: 20px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .roller-container { display: flex; justify-content: center; gap: 15px; margin: 20px 0; }
+
+        .reel {
+            width: 80px; height: 80px;
+            background: rgba(20,0,0,.9);
+            border: 2px solid #ff3300;
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 45px;
+            box-shadow: 0 0 15px rgba(255,50,0,.5);
+        }
+
+        .bet-select-panel { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+
+        .btn-bet {
+            padding: 10px 15px; font-weight: bold; border-radius: 8px;
+            border: 1px solid #ff3300; background: #220000; color: white; cursor: pointer;
+        }
+
+        .btn-bet.active { background: #ff3300; border-color: #ffcc00; }
+
+        .btn-spin {
+            padding: 15px 40px; font-size: 20px; font-weight: bold;
+            background: linear-gradient(45deg,#ff6600,#ff2200);
+            border: none; color: white; border-radius: 30px; cursor: pointer;
+            box-shadow: 0 0 15px rgba(255,50,0,.5);
+        }
+
+        .win-table { margin: 20px auto; width: 100%; max-width: 450px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .win-row { background: rgba(20,0,0,.9); padding: 8px; border-radius: 8px; display: flex; justify-content: space-between; border: 1px solid #ff3300; }
+        #msg { font-size: 20px; color: #ffcc00; margin: 20px 0; font-weight: bold; text-shadow: 0 0 10px #ff3300; }
+    </style>
+</head>
+<body>
+
+<button class="back-home-btn" onclick="window.location.href='4rabet.html'">⬅ Back To Casino</button>
+
+<h2>🎰 Roulette Wheel 🎰</h2>
+
+<div class="roller-container">
+    <div class="reel" id="reel1">🍒</div>
+    <div class="reel" id="reel2">🍒</div>
+    <div class="reel" id="reel3">🍒</div>
+</div>
+
+<div class="bet-select-panel">
+    <button class="btn-bet active" onclick="selectBet(10,this)">10</button>
+    <button class="btn-bet" onclick="selectBet(20,this)">20</button>
+    <button class="btn-bet" onclick="selectBet(50,this)">50</button>
+    <button class="btn-bet" onclick="selectBet(100,this)">100</button>
+</div>
+
+<div class="action-container">
+    <button class="btn-spin" id="spinBtn" onclick="spin()">SPIN 10</button>
+</div>
+
+<div id="msg">Select Bet & Spin!</div>
+
+<div class="win-table">
+    <div class="win-row"><span>🍒 (1x)</span><span id="r0">10</span></div>
+    <div class="win-row"><span>🍋 (2x)</span><span id="r1">20</span></div>
+    <div class="win-row"><span>💎 (5x)</span><span id="r2">50</span></div>
+    <div class="win-row"><span>7️⃣ (10x)</span><span id="r3">100</span></div>
+    <div class="win-row"><span>⭐ (15x)</span><span id="r4">150</span></div>
+    <div class="win-row"><span>🔔 (20x)</span><span id="r5">200</span></div>
+    <div class="win-row"><span>🔥 (25x)</span><span id="r6">250</span></div>
+    <div class="win-row"><span>🍀 (50x)</span><span id="r7">500</span></div>
+    <div class="win-row"><span>🍉 (100x)</span><span id="r8">1000</span></div>
+    <div class="win-row"><span>🍇 (200x)</span><span id="r9">2000</span></div>
+</div>
+
+<script>
+    const symbols = ['🍒','🍋','💎','7️⃣','⭐','🔔','🔥','🍀','🍉','🍇'];
+    const basePrizes = [1,2,5,10,15,20,25,50,100,200];
+    let currentBet = 10;
+    let lossStreak = 0; 
+    let usedJackpots = []; // Track karta hai kaunse jackpot lag chuke hain
+
+    function selectBet(val, btnElement){
+        currentBet = val;
+        document.querySelectorAll('.btn-bet').forEach(btn => btn.classList.remove('active'));
+        btnElement.classList.add('active');
+        document.getElementById('spinBtn').innerText = "SPIN " + val;
+        let betMult = (val === 20) ? 2 : (val === 50) ? 5 : (val === 100) ? 10 : 1;
+        for(let i=0; i<basePrizes.length; i++) {
+            document.getElementById('r'+i).innerText = basePrizes[i] * betMult;
+        }
+    }
+
+    function getRandomSymbol(){ return symbols[Math.floor(Math.random() * symbols.length)]; }
+
+    function spin(){
+        const spinBtn = document.getElementById('spinBtn');
+        spinBtn.disabled = true;
+        document.getElementById('msg').innerText = "Spinning...";
+        
+        let counter = 0;
+        const timer = setInterval(()=>{
+            document.getElementById('reel1').innerText = getRandomSymbol();
+            document.getElementById('reel2').innerText = getRandomSymbol();
+            document.getElementById('reel3').innerText = getRandomSymbol();
+            counter++;
+            
+            if(counter > 20) {
+                clearInterval(timer);
+                spinBtn.disabled = false;
+                
+                let r1 = document.getElementById('reel1').innerText;
+                let r2 = document.getElementById('reel2').innerText;
+                let r3 = document.getElementById('reel3').innerText;
+                
+                let jackpotSymbol = "";
+                let jackpotId = null;
+
+                // Milestones check: check karta hai ki kya jackpot abhi tak use hua hai ya nahi
+                if (lossStreak === 2 && !usedJackpots.includes(2)) { jackpotSymbol = '🍒'; jackpotId = 2; }
+                else if (lossStreak === 5 && !usedJackpots.includes(5)) { jackpotSymbol = '🍋'; jackpotId = 5; }
+                else if (lossStreak === 8 && !usedJackpots.includes(8)) { jackpotSymbol = '💎'; jackpotId = 8; }
+                else if (lossStreak === 19 && !usedJackpots.includes(19)) { jackpotSymbol = '7️⃣'; jackpotId = 19; }
+                else if (lossStreak === 24 && !usedJackpots.includes(24)) { jackpotSymbol = '⭐'; jackpotId = 24; }
+                else if (lossStreak === 39 && !usedJackpots.includes(39)) { jackpotSymbol = '🔔'; jackpotId = 39; }
+                else if (lossStreak === 49 && !usedJackpots.includes(49)) { jackpotSymbol = '🔥'; jackpotId = 49; }
+                else if (lossStreak === 99 && !usedJackpots.includes(99)) { jackpotSymbol = '🍀'; jackpotId = 99; }
+                else if (lossStreak === 199 && !usedJackpots.includes(199)) { jackpotSymbol = '🍉'; jackpotId = 199; }
+                else if (lossStreak === 399 && !usedJackpots.includes(399)) { jackpotSymbol = '🍇'; jackpotId = 399; }
+
+                if(jackpotSymbol !== "") {
+                    document.getElementById('reel1').innerText = jackpotSymbol;
+                    document.getElementById('reel2').innerText = jackpotSymbol;
+                    document.getElementById('reel3').innerText = jackpotSymbol;
+                    document.getElementById('msg').innerText = "MEGA JACKPOT! 🎉";
+                    usedJackpots.push(jackpotId); // Jackpot mark ho gaya
+                    lossStreak = 0; 
+                } else if (r1 === r2 || r2 === r3 || r1 === r3) {
+                    document.getElementById('msg').innerText = "You Won! 🎉";
+                    lossStreak = 0; 
+                } else {
+                    document.getElementById('msg').innerText = "Try Again!";
+                    lossStreak++; 
+                }
+            }
+        }, 100);
+    }
+</script>
+</body>
+</html>
+
